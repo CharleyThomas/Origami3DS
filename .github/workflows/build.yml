@@ -1,0 +1,57 @@
+name: Build and Release Windows Executable
+
+on:
+  push:
+    branches: [ "master", "main" ]
+
+jobs:
+  build-and-release:
+    runs-on: windows-latest
+    permissions:
+      contents: write  # Gives GitHub permission to create a release for you
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    # 1. Install Python so it can wrap our app
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-python-version: '3.11'
+
+    # 2. Install PyInstaller (the tool that makes .exe files) and PyQt6
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pyinstaller PyQt6
+
+    # 3. Dummy placeholder file to ensure compilation succeeds for now
+    - name: Create Base Script if Empty
+      run: |
+        if (!(Test-Path main.py)) { Set-Content -Path main.py -Value "print('Origami3DS Engine Initialized')" }
+
+    # 4. Compile main.py into a single, standalone standalone executable file
+    - name: Compile Executable
+      run: |
+        pyinstaller --onefile --windowed main.py --name Origami3DS
+
+    # 5. Automatically calculate a unique version number using the build count
+    - name: Set Version Number
+      id: versioning
+      run: |
+        echo "VERSION=1.0.${{ github.run_number }}" >> $env:GITHUB_OUTPUT
+
+    # 6. Create the Pre-release on GitHub and attach the executable
+    - name: Upload to GitHub Pre-Release
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: v1.0.${{ github.run_number }}
+        name: Origami3DS Dev v1.0.${{ github.run_number }}
+        body: |
+          Automated Development Build. 
+          Compiled on changes to commit: ${{ github.sha }}
+        prerelease: true
+        files: dist/Origami3DS.exe
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
