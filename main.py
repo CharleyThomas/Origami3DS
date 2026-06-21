@@ -1,7 +1,8 @@
 import sys
 from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QHBoxLayout, QMenuBar
-from ui.background import WindowEnvironmentManager
-from ui.3DS.viewport import ThreeDSMenuViewport
+from PyQt6.QtCore import Qt
+from background import WindowEnvironmentManager
+from 3DS.viewport import ThreeDSMenuViewport
 
 
 class OrigamiMainWindow(QMainWindow):
@@ -34,31 +35,29 @@ class OrigamiMainWindow(QMainWindow):
             }
         """)
 
-        # Add your placeholder navigation elements matching your layout
+        # Add your placeholder navigation elements matching your layout sketch
         self.menu_bar.addMenu("File")
         self.menu_bar.addMenu("fdgbdj")
         self.menu_bar.addMenu("zbhvdefjuhgie")
         self.menu_bar.addMenu("fnrjwtbghrjf")
         self.menu_bar.addMenu("nfjjirhngirf")
 
-        # Create a container block to align layout items cleanly below the menu bar
+        # Create a clean container block to align layout items below the menu bar
         master_container = QWidget()
         self.setCentralWidget(master_container)
         
-        # Core split layout framework configuration
-        master_layout = QHBoxLayout()
-        master_layout.setContentsMargins(0, 0, 45, 0)
-        master_layout.setSpacing(45)
+        # Pull the core layout framework directly from the environment module
+        master_layout = self.environment.master_layout
         master_container.setLayout(master_layout)
 
-        # 📌 2. THE LEFT SECTION (Pitch Black Console Bay - Houses the new 3DS package)
-        master_layout.addWidget(self.environment.left_housing)
-
-        # Load the custom menu interface straight into the left housing deck column
+        # 📌 2. THE LEFT SECTION (Injecting the 3DS Viewport directly into the housing)
         self.menu_elements = ThreeDSMenuViewport()
         self.environment.left_layout.addWidget(self.menu_elements, alignment=Qt.AlignmentFlag.AlignHCenter)
 
-        # 📌 3. THE RIGHT SECTION (Your workspace area)
+        # Add the left black column explicitly to our master layout view
+        master_layout.addWidget(self.environment.left_housing)
+
+        # 📌 3. THE RIGHT SECTION (Injecting the frosted canvas panel)
         master_layout.addWidget(self.environment.canvas_panel, stretch=1)
 
 
