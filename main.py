@@ -58,7 +58,7 @@ class OrigamiMainWindow(QMainWindow):
         control_row.addWidget(self.timeline_slider)
 
         # File Status Text
-        self.status_label = QLabel("Streaming Background Ambient Music...")
+        self.status_label = QLabel("Streaming System Environment Music...")
         self.status_label.setStyleSheet("color: #4CAF50; font-style: italic; font-weight: bold;")
         control_row.addWidget(self.status_label)
 
@@ -76,12 +76,15 @@ class OrigamiMainWindow(QMainWindow):
         self.play_button.clicked.connect(self.toggle_play)
         self.stop_button.clicked.connect(self.stop_music)
         
-        # Load a soft, looping background track from the web
-        music_url = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+        # Set up an open, direct server stream url for development
+        music_url = "https://ia801402.us.archive.org/24/items/wii-system-soundtrack-flac/Wii%20Shop%20Channel.mp3"
         self.player.setSource(QUrl(music_url))
         
-        # Set normal volume and start playing immediately!
-        self.audio_output.setVolume(0.3)
+        # Enable automated playlist looping logic
+        self.player.setLoops(QMediaPlayer.Loops.Infinite)
+        
+        # Set a soft volume and start playing immediately!
+        self.audio_output.setVolume(0.25)
         self.player.play()
 
     def toggle_play(self):
@@ -92,7 +95,7 @@ class OrigamiMainWindow(QMainWindow):
         else:
             self.player.play()
             self.play_button.setIcon(self.style().standardIcon(QStyle.StandardPixmap.SP_MediaPause))
-            self.status_label.setText("Streaming Background Ambient Music...")
+            self.status_label.setText("Streaming Ambient System Music...")
 
     def stop_music(self):
         self.player.stop()
