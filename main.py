@@ -1,7 +1,6 @@
 import sys
 import os
-from PyQt6.QtWidgets import (QApplication, QMainWindow, QLabel, QVBoxLayout, 
-                             QHBoxLayout, QWidget, QPushButton, QSlider, QStyle)
+from PyQt6.QtWidgets import QApplication, QMainWindow, QLabel, QVBoxLayout, QWidget
 from PyQt6.QtCore import Qt, QUrl
 from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
 
@@ -23,85 +22,26 @@ class OrigamiMainWindow(QMainWindow):
         main_layout = QVBoxLayout()
         central_widget.setLayout(main_layout)
 
-        # 🌸 Welcome Label
-        welcome_label = QLabel("Welcome to Origami3DS")
+        # 🌸 Welcome Label (Clean canvas placeholder)
+        welcome_label = QLabel("Welcome to Origami3DS\nYour audio panel is now hidden!")
         welcome_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        welcome_label.setStyleSheet("font-size: 24px; font-weight: bold; color: #333333; margin-top: 20px;")
+        welcome_label.setStyleSheet("font-size: 24px; font-weight: bold; color: #333333; margin-top: 50px;")
         main_layout.addWidget(welcome_label)
-
-        # 🎵 AUDIO CONTROLS PANEL
-        audio_panel = QWidget()
-        audio_panel.setStyleSheet("background-color: #f0f0f0; border-radius: 10px; padding: 15px;")
-        audio_layout = QVBoxLayout()
-        audio_panel.setLayout(audio_layout)
-
-        audio_title = QLabel("🎵 Theme Background Music (BGM)")
-        audio_title.setStyleSheet("font-size: 16px; font-weight: bold; color: #555555;")
-        audio_layout.addWidget(audio_title)
-
-        control_row = QHBoxLayout()
-        
-        # Play/Pause Button
-        self.play_button = QPushButton()
-        self.play_button.setIcon(self.style().standardIcon(QStyle.StandardPixmap.SP_MediaPause))
-        self.play_button.setFixedWidth(50)
-        control_row.addWidget(self.play_button)
-
-        # Stop Button
-        self.stop_button = QPushButton()
-        self.stop_button.setIcon(self.style().standardIcon(QStyle.StandardPixmap.SP_MediaStop))
-        self.stop_button.setFixedWidth(50)
-        control_row.addWidget(self.stop_button)
-
-        # Audio Track Timeline Slider
-        self.timeline_slider = QSlider(Qt.Orientation.Horizontal)
-        self.timeline_slider.setRange(0, 100)
-        control_row.addWidget(self.timeline_slider)
-
-        # File Status Text
-        self.status_label = QLabel("Playing local bgm.mp3...")
-        self.status_label.setStyleSheet("color: #4CAF50; font-style: italic; font-weight: bold;")
-        control_row.addWidget(self.status_label)
-
-        audio_layout.addLayout(control_row)
-
         main_layout.addStretch()
-        main_layout.addWidget(audio_panel)
 
-        # 🔊 BACKGROUND MUSIC ENGINE INTAKE
+        # 🔊 INVISIBLE BACKGROUND MUSIC ENGINE
+        # The media controls are gone from the screen, but the music still plays!
         self.player = QMediaPlayer()
         self.audio_output = QAudioOutput()
         self.player.setAudioOutput(self.audio_output)
         
-        # Link buttons to the player controls
-        self.play_button.clicked.connect(self.toggle_play)
-        self.stop_button.clicked.connect(self.stop_music)
-        
-        # Check if bgm.mp3 exists right next to the application
+        # Check if bgm.mp3 exists right next to the application executable
         audio_path = os.path.abspath("bgm.mp3")
         if os.path.exists(audio_path):
             self.player.setSource(QUrl.fromLocalFile(audio_path))
             self.player.setLoops(QMediaPlayer.Loops.Infinite)
-            self.audio_output.setVolume(0.25)
+            self.audio_output.setVolume(0.25)  # Soft background volume
             self.player.play()
-        else:
-            self.status_label.setText("Missing 'bgm.mp3' file in application folder!")
-            self.status_label.setStyleSheet("color: #D32F2F; font-style: italic; font-weight: bold;")
-
-    def toggle_play(self):
-        if self.player.playbackState() == QMediaPlayer.PlaybackState.PlayingState:
-            self.player.pause()
-            self.play_button.setIcon(self.style().standardIcon(QStyle.StandardPixmap.SP_MediaPlay))
-            self.status_label.setText("Music Paused")
-        else:
-            self.player.play()
-            self.play_button.setIcon(self.style().standardIcon(QStyle.StandardPixmap.SP_MediaPause))
-            self.status_label.setText("Playing local bgm.mp3...")
-
-    def stop_music(self):
-        self.player.stop()
-        self.play_button.setIcon(self.style().standardIcon(QStyle.StandardPixmap.SP_MediaPlay))
-        self.status_label.setText("Music Stopped")
 
 
 if __name__ == "__main__":
