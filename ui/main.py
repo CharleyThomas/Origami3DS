@@ -1,7 +1,6 @@
 import sys
 from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QMenuBar
 from ui.background import WindowEnvironmentManager
-from ui.theme import Nintendo3DSWidget
 
 
 class OrigamiMainWindow(QMainWindow):
@@ -9,11 +8,10 @@ class OrigamiMainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        # 🌌 Initialize background styles, music, and baseline windows frames
+        # 🌌 Initialize background styles, music, and baseline window frames
         self.environment = WindowEnvironmentManager(self)
 
         # 📌 1. THE TOP NAVIGATION BAR (MenuBar)
-        # Replaces standard window headers with a native dark application row
         self.menu_bar = QMenuBar(self)
         self.setMenuBar(self.menu_bar)
         self.menu_bar.setStyleSheet("""
@@ -35,7 +33,7 @@ class OrigamiMainWindow(QMainWindow):
             }
         """)
 
-        # Add your placeholder navigation elements matching your diagram layout
+        # Add your placeholder navigation elements matching your layout
         self.menu_bar.addMenu("File")
         self.menu_bar.addMenu("fdgbdj")
         self.menu_bar.addMenu("zbhvdefjuhgie")
@@ -52,16 +50,11 @@ class OrigamiMainWindow(QMainWindow):
         master_layout.setSpacing(45)
         master_container.setLayout(master_layout)
 
-        # 📌 2. THE LEFT SECTION (Pitch Black Console Bay)
-        # Pulls the black dock layout directly from our environment configuration
+        # 📌 2. THE LEFT SECTION (Pitch Black Console Bay - Now Blank!)
+        # This area is completely empty and ready for your new design idea
         master_layout.addWidget(self.environment.left_housing)
 
-        # Inject the dual 3DS preview panels safely straight into the left black frame
-        self.nintendo_screens = Nintendo3DSWidget()
-        self.environment.left_layout.addWidget(self.nintendo_screens)
-
-        # 📌 3. THE RIGHT SECTION (Your future workspace area)
-        # Accesses the frosted panel from the background module for layout customization later
+        # 📌 3. THE RIGHT SECTION (Your workspace area)
         master_layout.addWidget(self.environment.canvas_panel, stretch=1)
 
 
