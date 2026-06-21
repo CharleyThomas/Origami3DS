@@ -1,6 +1,7 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QMenuBar
+from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QHBoxLayout, QMenuBar
 from ui.background import WindowEnvironmentManager
+from ui.3DS.viewport import ThreeDSMenuViewport
 
 
 class OrigamiMainWindow(QMainWindow):
@@ -50,9 +51,12 @@ class OrigamiMainWindow(QMainWindow):
         master_layout.setSpacing(45)
         master_container.setLayout(master_layout)
 
-        # 📌 2. THE LEFT SECTION (Pitch Black Console Bay - Now Blank!)
-        # This area is completely empty and ready for your new design idea
+        # 📌 2. THE LEFT SECTION (Pitch Black Console Bay - Houses the new 3DS package)
         master_layout.addWidget(self.environment.left_housing)
+
+        # Load the custom menu interface straight into the left housing deck column
+        self.menu_elements = ThreeDSMenuViewport()
+        self.environment.left_layout.addWidget(self.menu_elements, alignment=Qt.AlignmentFlag.AlignHCenter)
 
         # 📌 3. THE RIGHT SECTION (Your workspace area)
         master_layout.addWidget(self.environment.canvas_panel, stretch=1)
