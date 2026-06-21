@@ -10,39 +10,39 @@ class OrigamiMainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        # Set up the window title and size
+        # Set up the window title and size matching standard screen bounds
         self.setWindowTitle("Origami3DS Development Build")
         self.resize(1280, 720)
 
-        # Style the main window background (Deep dark canvas)
-        self.setStyleSheet("QMainWindow { background-color: #121212; }")
+        # Main window frame color (Deep solid charcoal/black background)
+        self.setStyleSheet("QMainWindow { background-color: #111111; }")
 
         # Create a central container area
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
 
-        # Main vertical layout
+        # Main vertical layout with margins matching the spacing in your image
         main_layout = QVBoxLayout()
-        main_layout.setContentsMargins(40, 40, 40, 40)
+        main_layout.setContentsMargins(45, 45, 45, 45)
         central_widget.setLayout(main_layout)
 
-        # ✨ THE BLUR PANEL (Frosted Glass Effect Layout)
-        # Using a semi-transparent white layer over the dark background to simulate frost/blur
-        self.glass_panel = QWidget()
-        self.glass_panel.setStyleSheet("""
+        # 🎨 EXACT REPLICA CANVAS PANEL
+        # Matches the smooth, rounded corners and dark gray coloration from your screenshot
+        self.canvas_panel = QWidget()
+        self.canvas_panel.setStyleSheet("""
             QWidget {
-                background-color: rgba(255, 255, 255, 30);
-                border: 1px solid rgba(255, 255, 255, 45);
-                border-radius: 15px;
+                background-color: #313131;
+                border: 1px solid #3d3d3d;
+                border-radius: 20px;
             }
         """)
         
-        # Add an empty layout inside the glass panel for our future screen designs
-        glass_layout = QVBoxLayout()
-        self.glass_panel.setLayout(glass_layout)
+        # Give it an empty layout internally so we can place modules inside later
+        canvas_layout = QVBoxLayout()
+        self.canvas_panel.setLayout(canvas_layout)
         
-        # Add the pane into our main view window
-        main_layout.addWidget(self.glass_panel)
+        # Load the panel directly into our display window layout
+        main_layout.addWidget(self.canvas_panel)
 
         # 🔊 INVISIBLE BACKGROUND MUSIC ENGINE
         self.player = QMediaPlayer()
