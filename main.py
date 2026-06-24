@@ -1,12 +1,19 @@
 import sys
+import os
+import importlib
+
+# 🧭 Path Fix: Force Python to look inside this exact folder for modules
+current_dir = os.path.dirname(os.path.abspath(__file__))
+if current_dir not in sys.path:
+    sys.path.insert(0, current_dir)
+
 from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QHBoxLayout, QMenuBar
 from PyQt6.QtCore import Qt
 
-# 📦 Native relative imports (Tells PyInstaller exactly what files to bundle)
+# 📦 Safe relative loading for your background module
 from background import WindowEnvironmentManager
-import importlib
 
-# Standard import fallback workaround for the '3DS' directory name syntax limitation
+# 🛠️ Safe relative loading for the "3DS" folder (bypasses Python's digit-starting naming rule)
 import3ds = importlib.import_module("3DS.viewport")
 ThreeDSMenuViewport = import3ds.ThreeDSMenuViewport
 
