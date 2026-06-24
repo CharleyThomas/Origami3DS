@@ -1,8 +1,14 @@
 import sys
+import importlib.util
 from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QHBoxLayout, QMenuBar
 from PyQt6.QtCore import Qt
 from background import WindowEnvironmentManager
-from 3DS.viewport import ThreeDSMenuViewport
+
+# 🛠️ Python workaround to import safely from the "3DS" folder without syntax errors
+spec = importlib.util.spec_from_file_location("viewport", "3DS/viewport.py")
+viewport_module = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(viewport_module)
+ThreeDSMenuViewport = viewport_module.ThreeDSMenuViewport
 
 
 class OrigamiMainWindow(QMainWindow):
@@ -10,10 +16,10 @@ class OrigamiMainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        # 🌌 Load environment configurations using our brand new pixel specs
+        # 🌌 Load environment configurations matching your Figma specs down to the pixel
         self.environment = WindowEnvironmentManager(self)
 
-        # 📌 1. HIGH-FIDELITY TOP NAVIGATION BAR (Height: 82px)
+        # 📌 1. HIGH-FIDELITY TOP NAVIGATION BAR (Height: 82px, Hex: #1e1e1e)
         self.menu_bar = QMenuBar(self)
         self.setMenuBar(self.menu_bar)
         self.menu_bar.setStyleSheet("""
@@ -28,7 +34,7 @@ class OrigamiMainWindow(QMainWindow):
             }
             QMenuBar::item {
                 background: transparent;
-                padding: 30px 20px; /* Vertically centers text inside the 82px bar */
+                padding: 30px 20px;
                 color: #b3b3b3;
             }
             QMenuBar::item:selected {
@@ -37,7 +43,7 @@ class OrigamiMainWindow(QMainWindow):
             }
         """)
 
-        # Populating tabs mapped exactly from your image layout header
+        # Custom header tabs mapped from your layout mockup
         self.menu_bar.addMenu("Home")
         self.menu_bar.addMenu("Preview")
         self.menu_bar.addMenu("Export")
@@ -47,19 +53,19 @@ class OrigamiMainWindow(QMainWindow):
         self.menu_bar.addMenu("Effects")
         self.menu_bar.addMenu("Settings")
 
-        # Layout structural framework placement
+        # Master layout container attachment
         master_container = QWidget()
         self.setCentralWidget(master_container)
         
         master_layout = self.environment.master_layout
         master_container.setLayout(master_layout)
 
-        # 📌 2. INJECT CONTENT TO LEFT FRAME (672px Black Column)
+        # 📌 2. INJECT CONTENT TO LEFT FRAME (672px Black Sidebar Column)
         self.menu_elements = ThreeDSMenuViewport()
         self.environment.left_layout.addWidget(self.menu_elements, alignment=Qt.AlignmentFlag.AlignCenter)
         master_layout.addWidget(self.environment.left_housing)
 
-        # 📌 3. INJECT CONTENT TO RIGHT FRAME (Frosted Blur Panel)
+        # 📌 3. INJECT CONTENT TO RIGHT FRAME (Frosted Blur Panel Canvas Workspace)
         master_layout.addWidget(self.environment.canvas_panel, stretch=1)
 
 
