@@ -9,56 +9,53 @@ class WindowEnvironmentManager:
     def __init__(self, main_window):
         self.window = main_window
         
-        # 🖥️ Basic frame window styling
+        # Lock down window bounds to match your high-res design frame exactly
         self.window.setWindowTitle("Origami3DS Development Build")
-        self.window.resize(1280, 720)
+        self.window.resize(1917, 1078)
         self.window.setStyleSheet("""
             QMainWindow { 
-                background-color: #111111; 
+                background-color: #1e1e1e; 
             }
         """)
 
-        # Master layout container for splitting Left and Right zones
+        # Master application frame structure
         central_widget = QWidget()
         self.window.setCentralWidget(central_widget)
         
         self.master_layout = QHBoxLayout()
-        self.master_layout.setContentsMargins(0, 0, 45, 45) # Padding on right and bottom
-        self.master_layout.setSpacing(45)
+        self.master_layout.setContentsMargins(0, 0, 0, 0) # Running flush against outer screen bounds
+        self.master_layout.setSpacing(0)
         central_widget.setLayout(self.master_layout)
 
-        # 🖤 THE PITCH BLACK LEFT SECTION (Houses your 3DS package screens + controls)
+        # 🖤 LEFT PITCH BLACK SIDEBAR (Exact width: 672px)
         self.left_housing = QWidget()
-        self.left_housing.setFixedWidth(460)
+        self.left_housing.setFixedWidth(672)
         self.left_housing.setStyleSheet("""
             QWidget {
                 background-color: #000000;
-                border-right: 1px solid #222222;
             }
         """)
         self.left_layout = QVBoxLayout()
-        self.left_layout.setContentsMargins(30, 45, 30, 45)
-        self.left_layout.setSpacing(20) # Clean gaps between screens and controls
+        self.left_layout.setContentsMargins(0, 0, 0, 0)
+        self.left_layout.setSpacing(0)
         self.left_housing.setLayout(self.left_layout)
 
-        # ❄️ THE FROSTED GLASS EDIT PANEL (The empty right workspace canvas)
+        # ❄️ RIGHT FROSTED GLASS WORKSPACE (75% tint-overlay emulation)
         self.canvas_panel = QWidget()
         self.canvas_panel.setStyleSheet("""
             QWidget {
-                background-color: rgba(49, 49, 49, 220);
-                border: 1px solid rgba(255, 255, 255, 30);
-                border-radius: 20px;
+                background-color: rgba(43, 43, 43, 190); /* #2b2b2b at roughly 75% opacity */
+                border: none;
             }
         """)
         self.canvas_layout = QVBoxLayout()
         self.canvas_panel.setLayout(self.canvas_layout)
 
-        # 🔊 APPS ENGINE MUSIC PLAYER (Plays your main app layout track)
+        # 🔊 BACKSTAGE MUSIC DATA ENGINE
         self.player = QMediaPlayer()
         self.audio_output = QAudioOutput()
         self.player.setAudioOutput(self.audio_output)
         
-        # Target your root folder track
         audio_path = os.path.abspath("bgm.mp3")
         if os.path.exists(audio_path):
             self.player.setSource(QUrl.fromLocalFile(audio_path))
