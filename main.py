@@ -10,54 +10,56 @@ class OrigamiMainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        # 🌌 Initialize background styles, music, and baseline window frames
+        # 🌌 Load environment configurations using our brand new pixel specs
         self.environment = WindowEnvironmentManager(self)
 
-        # 📌 1. THE TOP NAVIGATION BAR (MenuBar)
+        # 📌 1. HIGH-FIDELITY TOP NAVIGATION BAR (Height: 82px)
         self.menu_bar = QMenuBar(self)
         self.setMenuBar(self.menu_bar)
         self.menu_bar.setStyleSheet("""
             QMenuBar {
-                background-color: #111111;
+                background-color: #1e1e1e;
                 color: #ffffff;
-                font-size: 14px;
-                padding: 5px;
-                border-bottom: 1px solid #222222;
+                font-size: 15px;
+                font-family: 'Segoe UI', Arial, sans-serif;
+                height: 82px;
+                padding-left: 20px;
+                border: none;
             }
             QMenuBar::item {
                 background: transparent;
-                padding: 4px 10px;
-                margin-right: 5px;
+                padding: 30px 20px; /* Vertically centers text inside the 82px bar */
+                color: #b3b3b3;
             }
             QMenuBar::item:selected {
-                background-color: #313131;
-                border-radius: 4px;
+                color: #ffffff;
+                background-color: #2b2b2b;
             }
         """)
 
-        # Add your placeholder navigation elements matching your layout sketch
-        self.menu_bar.addMenu("File")
-        self.menu_bar.addMenu("fdgbdj")
-        self.menu_bar.addMenu("zbhvdefjuhgie")
-        self.menu_bar.addMenu("fnrjwtbghrjf")
-        self.menu_bar.addMenu("nfjjirhngirf")
+        # Populating tabs mapped exactly from your image layout header
+        self.menu_bar.addMenu("Home")
+        self.menu_bar.addMenu("Preview")
+        self.menu_bar.addMenu("Export")
+        self.menu_bar.addMenu("Overview")
+        self.menu_bar.addMenu("Colours")
+        self.menu_bar.addMenu("Images")
+        self.menu_bar.addMenu("Effects")
+        self.menu_bar.addMenu("Settings")
 
-        # Create a clean container block to align layout items below the menu bar
+        # Layout structural framework placement
         master_container = QWidget()
         self.setCentralWidget(master_container)
         
-        # Pull the core layout framework directly from the environment module
         master_layout = self.environment.master_layout
         master_container.setLayout(master_layout)
 
-        # 📌 2. THE LEFT SECTION (Injecting the 3DS Viewport directly into the housing)
+        # 📌 2. INJECT CONTENT TO LEFT FRAME (672px Black Column)
         self.menu_elements = ThreeDSMenuViewport()
-        self.environment.left_layout.addWidget(self.menu_elements, alignment=Qt.AlignmentFlag.AlignHCenter)
-
-        # Add the left black column explicitly to our master layout view
+        self.environment.left_layout.addWidget(self.menu_elements, alignment=Qt.AlignmentFlag.AlignCenter)
         master_layout.addWidget(self.environment.left_housing)
 
-        # 📌 3. THE RIGHT SECTION (Injecting the frosted canvas panel)
+        # 📌 3. INJECT CONTENT TO RIGHT FRAME (Frosted Blur Panel)
         master_layout.addWidget(self.environment.canvas_panel, stretch=1)
 
 
