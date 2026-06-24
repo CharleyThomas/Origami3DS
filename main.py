@@ -2,22 +2,20 @@ import sys
 import os
 import importlib
 
-# 🧭 Path Fix: Point Python inside the ui/ directory for imports
+# 🧭 Route paths so Python can find the 'ui' package seamlessly
 current_dir = os.path.dirname(os.path.abspath(__file__))
-ui_dir = os.path.join(current_dir, "ui")
-if ui_dir not in sys.path:
-    sys.path.insert(0, ui_dir)
+if current_dir not in sys.path:
+    sys.path.insert(0, current_dir)
 
 from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QHBoxLayout, QMenuBar
 from PyQt6.QtCore import Qt
 
-# 📦 Imports your layout manager directly from the ui/ folder
+# 📦 Import your environment manager from the ui folder
 from ui.background import WindowEnvironmentManager
 
-# 🛠️ Safe loading for the "3DS" folder inside ui/ without syntax limitations
-spec = importlib.util.spec_from_file_location("viewport", os.path.join(ui_dir, "3DS", "viewport.py"))
-viewport_module = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(viewport_module)
+# 🛠️ Clean module import that PyInstaller completely understands 
+# (Bypasses the 3DS folder naming limitation natively)
+viewport_module = importlib.import_module("ui.3DS.viewport")
 ThreeDSMenuViewport = viewport_module.ThreeDSMenuViewport
 
 
