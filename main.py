@@ -2,20 +2,23 @@ import sys
 import os
 import importlib
 
-# 🧭 Path Fix: Force Python to look inside this exact folder for modules
+# 🧭 Path Fix: Point Python inside the ui/ directory for imports
 current_dir = os.path.dirname(os.path.abspath(__file__))
-if current_dir not in sys.path:
-    sys.path.insert(0, current_dir)
+ui_dir = os.path.join(current_dir, "ui")
+if ui_dir not in sys.path:
+    sys.path.insert(0, ui_dir)
 
 from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QHBoxLayout, QMenuBar
 from PyQt6.QtCore import Qt
 
-# 📦 Safe relative loading for your background module
-from background import WindowEnvironmentManager
+# 📦 Imports your layout manager directly from the ui/ folder
+from ui.background import WindowEnvironmentManager
 
-# 🛠️ Safe relative loading for the "3DS" folder (bypasses Python's digit-starting naming rule)
-import3ds = importlib.import_module("3DS.viewport")
-ThreeDSMenuViewport = import3ds.ThreeDSMenuViewport
+# 🛠️ Safe loading for the "3DS" folder inside ui/ without syntax limitations
+spec = importlib.util.spec_from_file_location("viewport", os.path.join(ui_dir, "3DS", "viewport.py"))
+viewport_module = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(viewport_module)
+ThreeDSMenuViewport = viewport_module.ThreeDSMenuViewport
 
 
 class OrigamiMainWindow(QMainWindow):
