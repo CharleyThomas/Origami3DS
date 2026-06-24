@@ -1,14 +1,14 @@
 import sys
-import importlib.util
 from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QHBoxLayout, QMenuBar
 from PyQt6.QtCore import Qt
-from background import WindowEnvironmentManager
 
-# 🛠️ Python workaround to import safely from the "3DS" folder without syntax errors
-spec = importlib.util.spec_from_file_location("viewport", "3DS/viewport.py")
-viewport_module = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(viewport_module)
-ThreeDSMenuViewport = viewport_module.ThreeDSMenuViewport
+# 📦 Native relative imports (Tells PyInstaller exactly what files to bundle)
+from background import WindowEnvironmentManager
+import importlib
+
+# Standard import fallback workaround for the '3DS' directory name syntax limitation
+import3ds = importlib.import_module("3DS.viewport")
+ThreeDSMenuViewport = import3ds.ThreeDSMenuViewport
 
 
 class OrigamiMainWindow(QMainWindow):
